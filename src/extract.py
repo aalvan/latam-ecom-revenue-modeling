@@ -20,19 +20,20 @@ def get_public_holidays(public_holidays_url: str, year: str) -> DataFrame:
     # TODO: Implement this function.
     # You must use the requests library to get the public holidays for the given year.
     # The url is public_holidays_url/{year}/BR.
+    # create a dataframe
     # You must delete the columns "types" and "counties" from the dataframe.
     # You must convert the "date" column to datetime.
     # You must raise a SystemExit if the request fails. Research the raise_for_status
     # method from the requests library.
-    r = requests.get(f'{public_holidays_url}/{year}/BR')
-    if r.raise_for_status() == None:
-        df = DataFrame(r.json())
-        df.drop(columns=['counties', 'types'], inplace=True)
-        df.date = to_datetime(df.date)
-        return df
+    try:
+        r = requests.get(f'{public_holidays_url}/{year}/BR')
+    except requests.RequestException as e:
+        raise SystemExit(f'Request failed: {e}')
 
-    else:
-        raise SystemExit
+    df = DataFrame(r.json())
+    df.drop(columns=['counties', 'types'], inplace=True)
+    df.date = to_datetime(df.date)
+    return df
 
 
 def extract(
