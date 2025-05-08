@@ -75,8 +75,8 @@ def pandas_to_json_object(df: pd.DataFrame) -> dict:
     return json.loads(df.to_json(orient="records"))
 
 
-def test_query_delivery_date_difference(database: Engine):
-    query_name = "delivery_date_difference"
-    actual: QueryResult = query_delivery_date_difference(database)
+def test_query_orders_per_day_and_holidays_2017(database: Engine):
+    query_name = "orders_per_day_and_holidays_2017"
+    actual: QueryResult = query_orders_per_day_and_holidays_2017(database)
     expected = read_query_result(query_name)
     assert pandas_to_json_object(actual.result) == expected
