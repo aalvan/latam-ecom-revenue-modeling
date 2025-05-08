@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
 
+import pandas as pd
 from pandas import DataFrame
 
 
@@ -181,7 +182,7 @@ def plot_freight_value_weight_relationship(df: DataFrame):
     """
     # TODO: plot freight value weight relationship using seaborn scatterplot.
     # Your x-axis should be weight and, y-axis freight value.
-    raise NotImplementedError
+    sns.scatterplot(data=df, x="product_weight_g", y="freight_value")
 
 
 def plot_delivery_date_difference(df: DataFrame):
@@ -204,4 +205,20 @@ def plot_order_amount_per_day_with_holidays(df: DataFrame):
     # TODO: plot order amount per day with holidays using matplotlib.
     # Mark holidays with vertical lines.
     # Hint: use plt.axvline.
-    raise NotImplementedError
+    df['date'] = (df['date']/10000).astype(int)
+    df['date'] = pd.to_datetime(df['date'], unit='s')
+    df['date'] = df['date'].dt.date
+    df = df.groupby(by='date').sum()
+    df = pd.DataFrame({'date': df.index, 'order_count': df['order_count'], 'holiday': df['holiday']})
+
+    fig, ax = plt.subplots()
+    lines_list = df[df['holiday'] == True]['date'].to_list()
+    ax.plot(df['date'], df['order_count'], )
+    for number in lines_list:
+        ax.axvline(x=number)
+    ax.tick_params(axis='x', labelrotation=45)
+    ax.axvline(x=number, color='green', linestyle='--', label='holiday')
+    ax.legend()
+    plt.xlabel('Dates')
+    plt.ylabel('Count')
+    plt.show()
