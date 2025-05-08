@@ -16,4 +16,4 @@ def load(data_frames: Dict[str, DataFrame], database: Engine):
     # table.
     # For the table name use the `data_frames` dict keys.
     for name in data_frames:
-        data_frames[name].to_sql(name, database)
+        data_frames[name].to_sql(name, database, if_exists='replace')
