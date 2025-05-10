@@ -244,12 +244,8 @@ def query_orders_per_day_and_holidays_2017(database: Engine) -> QueryResult:
     order_purchase_ammount_per_date = filtered_dates['order_purchase_timestamp'].dt.date.value_counts()
     # Keep the code below as it is, this will return the result from
     # `aggregations` variable with the corresponding name and format.
-    #holidays['date'] = pd.to_datetime(holidays['date'])
     holidays['date'] = pd.to_datetime(holidays['date']).dt.date
-
-    holidays_dates = holidays['date'].to_list()
-    #result_df = pd.DataFrame({'order_count':order_purchase_ammount_per_date.values, 'date':order_purchase_ammount_per_date.index, 'holiday': order_purchase_ammount_per_date.index.isin(holidays_dates)})
-    result_df = pd.DataFrame({'order_count':order_purchase_ammount_per_date.values, 'date':pd.to_datetime(order_purchase_ammount_per_date.index.values).astype(np.int64) // 10 ** 6, 'holiday': order_purchase_ammount_per_date.index.isin(holidays_dates)})
+    result_df = pd.DataFrame({'order_count':order_purchase_ammount_per_date.values, 'date':order_purchase_ammount_per_date.index.values, 'holiday': order_purchase_ammount_per_date.index.isin(holidays['date'])})
     result_df = result_df.sort_values(by='date')
     return QueryResult(query=query_name, result=result_df)
 

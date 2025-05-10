@@ -205,19 +205,16 @@ def plot_order_amount_per_day_with_holidays(df: DataFrame):
     # TODO: plot order amount per day with holidays using matplotlib.
     # Mark holidays with vertical lines.
     # Hint: use plt.axvline.
-    df['date'] = (df['date']/10000).astype(int)
-    df['date'] = pd.to_datetime(df['date'], unit='s')
-    df['date'] = df['date'].dt.date
-    df = df.groupby(by='date').sum()
-    df = pd.DataFrame({'date': df.index, 'order_count': df['order_count'], 'holiday': df['holiday']})
+    #df['date'] = df['date'].dt.date
+    #df = df.groupby(by='date').sum()
+    #df = pd.DataFrame({'date': df.index, 'order_count': df['order_count'], 'holiday': df['holiday']})
 
-    fig, ax = plt.subplots()
-    lines_list = df[df['holiday'] == True]['date'].to_list()
-    ax.plot(df['date'], df['order_count'], )
+    fig, ax = plt.subplots(figsize=(10,5))
+    lines_list = df[df['holiday'] == True]['date']
+    ax.plot(df['date'], df['order_count'], color='green')
     for number in lines_list:
-        ax.axvline(x=number)
+        ax.axvline(x=number,color='blue', linestyle=':')
     ax.tick_params(axis='x', labelrotation=45)
-    ax.axvline(x=number, color='green', linestyle='--', label='holiday')
     ax.legend()
     plt.xlabel('Dates')
     plt.ylabel('Count')
